@@ -5,7 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import javax.annotation.processing.Messager;
+
 import Models.Message;
+import Models.MessagePiezasDisponibles;
+import Models.MessageRequest;
 
 public class ThreadServer extends Thread{
     private Server servidor;
@@ -40,10 +44,23 @@ public class ThreadServer extends Thread{
                 mensajeRecibido = (Message)readerStream.readObject();
                 servidor.getPantalla().agregarMensaje("Msj de client: " +
                         mensajeRecibido + "\n" );
-                /*if (mensajeRecibido.tipo.equals("Name")){
+                if (mensajeRecibido.tipo.equals("Name")){
                     this.nombre = mensajeRecibido.mensaje;
+                } else if (mensajeRecibido instanceof MessageRequest){
+                    MessageRequest request = (MessageRequest) mensajeRecibido;
+                    System.out.println(request.getTipoRequest());
+                    switch (request.getTipoRequest()) {
+                        case "piezasDisponibles":
+                            MessagePiezasDisponibles piezasDisponibles = new MessagePiezasDisponibles("piezas", "Server", this.nombre, "", servidor.getPiezasDisponibles());
+                            servidor.sendPrivateMessage(piezasDisponibles);
+                            System.out.println("Piezas enviadas");
+                            break;
+                    
+                        default:
+                            break;
+                    }
                     writerStream.writeObject(new Message("NameConfirmation", "Servidor", nombre, "Tu TS recibió tu nombre"));
-                }else if (mensajeRecibido.tipo.equals("Broadcast")){
+                }/*else if (mensajeRecibido.tipo.equals("Broadcast")){
                     servidor.broadcast(mensajeRecibido);
                 }else if (mensajeRecibido.tipo.equals("Private")){
                     servidor.sendPrivateMessage(mensajeRecibido);
@@ -62,4 +79,36 @@ public class ThreadServer extends Thread{
         }
     }
 }
+
+
+    public ObjectInputStream getReaderStream() {
+        return readerStream;
+    }
+
+
+    public void setReaderStream(ObjectInputStream readerStream) {
+        this.readerStream = readerStream;
+    }
+
+
+    public ObjectOutputStream getWriterStream() {
+        return writerStream;
+    }
+
+
+    public void setWriterStream(ObjectOutputStream writerStream) {
+        this.writerStream = writerStream;
+    }
+
+
+    public String getNombre() {
+        return nombre;
+    }
+
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+
 }

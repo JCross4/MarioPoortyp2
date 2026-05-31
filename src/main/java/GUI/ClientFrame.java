@@ -5,7 +5,10 @@
 package GUI;
 
 import Client.Cliente;
+import Models.Board;
 import Models.Message;
+import Models.MessageRequest;
+import Models.Pieza;
 
 import javax.swing.JOptionPane;
 
@@ -17,6 +20,8 @@ public class ClientFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ClientFrame.class.getName());
     private Cliente cliente;
+    private int casillasDibujadas;
+    private final int sizeCasilla = 30;
     
     /**
      * Creates new form ClientFrame
@@ -24,7 +29,10 @@ public class ClientFrame extends javax.swing.JFrame {
     public ClientFrame() {
         cliente = new Cliente(this);
         initComponents();
+        //cliente.solicitarPiezasDisponiblesServer();
         jTextArea1.append(cliente.getNombre());
+        cliente.getPlayer().setPieza(obtenerPieza());
+        //TODO: Eliminar pieza de las piezas disponibles en server
     }
 
     /**
@@ -102,9 +110,11 @@ public class ClientFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        int[] resultTirada = cliente.realizarTirada();
-        Message m = new Message("Broadcast", cliente.getNombre(), "", "La tirada resulta en: dado1: " + resultTirada[0] + " dado2: " + resultTirada[1]);
-        cliente.enviarMensaje(m);
+        int[] resultTirada = cliente.getPlayer().realizarTirada();
+        String tiradaString = cliente.getPlayer().obtenerStringTirada(resultTirada);
+        Message m = new Message("Broadcast", cliente.getNombre(), "", "La tirada resulta en: " + tiradaString);
+        cliente.escribirMensaje(m);
+        dibujarTablero(cliente.getTablero());
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -141,13 +151,24 @@ public class ClientFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 
-    public String obtenerNombre (){
+    public String obtenerNombre(){
         String name = JOptionPane.showInputDialog("Digite su nick:");
         return name;
+    }
+
+    public Pieza obtenerPieza(){
+        String nombrePieza = (String) JOptionPane.showInputDialog(null, "Escoja una pieza para jugar:", "Pieza", JOptionPane.QUESTION_MESSAGE, null, cliente.obtenerStringPiezasDisponibles(), cliente.obtenerStringPiezasDisponibles()[0]);
+        Pieza piezaSeleccionada = cliente.obtenerPiezaDesdeString(nombrePieza);
+        return piezaSeleccionada;
     }
     
     public void agregarMensaje(String texto){
         jTextArea1.append(texto);
+    }
+
+    public void dibujarTablero(Board tablero){
+        BoardDrawer creadorTablero = new BoardDrawer(jPanel1, sizeCasilla, casillasDibujadas, tablero);
+        creadorTablero.dibujarTablero();
     }
 
 }

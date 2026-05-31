@@ -21,13 +21,14 @@ public class ThreadConexiones extends Thread{
                 //se queda esperando que alguien en la red se conecte a la IP y port
                 //cuando alguien se conecta obtiene el socket y crea la conexion
                 //en el server con el cliente
-                Socket socketCliente = servidor.serverSocket.accept();
+                Socket socketCliente = servidor.getServerSocket().accept();
                 servidor.getPantalla().agregarMensaje("Conexión recibida: #" + (++counter) + "\n");
                 //crear todo el threadServidor
                 ThreadServer newClient = new ThreadServer(servidor, socketCliente);
                 servidor.connectClientsThreads.add(newClient);
                 newClient.start();
                 servidor.getPantalla().agregarMensaje("Cliente agregado al arreglo\n");
+                servidor.getPantalla().actualizarLabelClientes(servidor.connectClientsThreads.size() + "");
             } catch (IOException ex) {
                 servidor.getPantalla().agregarMensaje("Error en accept: " + ex.getMessage() + "\n");
             }

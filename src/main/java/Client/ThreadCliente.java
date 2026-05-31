@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 
 import Models.Message;
+import Models.MessageBoard;
+import Models.MessagePiezasDisponibles;
 
 public class ThreadCliente extends Thread{
     private Cliente cliente;
@@ -32,7 +34,13 @@ public class ThreadCliente extends Thread{
                 mensajeRecibido = (Message)readerStream.readObject();
                 if (mensajeRecibido.tipo.equals( "Tirada") ){
                     cliente.pantalla.agregarMensaje(mensajeRecibido.emisor+ ": "+ mensajeRecibido.mensaje);
-                }else{
+                } else if (mensajeRecibido.tipo.equals( "board")){
+                    MessageBoard boardRecibido = (MessageBoard) mensajeRecibido;
+                    cliente.crearTecladoRecibido(boardRecibido);
+                } else if (mensajeRecibido.tipo.equals( "piezas")){
+                    MessagePiezasDisponibles piezasDisponiblesServer = (MessagePiezasDisponibles) mensajeRecibido;
+                    cliente.setPiezasDisponibles(piezasDisponiblesServer.getPiezasDisponibles());
+                } else{
                     cliente.pantalla.agregarMensaje(mensajeRecibido.emisor+ ": "+ mensajeRecibido.mensaje);
                 }
                 //System.out.println("Out if: " );
