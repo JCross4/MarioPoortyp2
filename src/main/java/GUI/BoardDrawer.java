@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import Models.Board;
 import Models.Casilla;
+import Models.Pieza;
 
 public class BoardDrawer {
     private JPanel panelBoard;
@@ -42,6 +43,15 @@ public class BoardDrawer {
         casillasDibujadas+=1;
     }
 
+    public void dibujarPieza(Point posicion, Pieza pieza){
+        JLabel nuevaPieza = crearLabel("", posicion, sizeCasilla-5, sizeCasilla-5);
+        nuevaPieza.setBackground(Color.RED);
+        nuevaPieza.setOpaque(true);
+        panelBoard.add(nuevaPieza);
+        panelBoard.setComponentZOrder(nuevaPieza, 0);
+        panelBoard.repaint();
+    }
+
     public JLabel crearLabel(String texto, Point posicion, int width, int height){
         JLabel nuevoLabel = new JLabel(texto);
         nuevoLabel.setBounds(posicion.x, posicion.y, width, height);
@@ -63,6 +73,21 @@ public class BoardDrawer {
         }
         System.out.println("X= " + posicionActual.x + "Y= " + posicionActual.y);
         return posicionActual;
+    }
+
+    public Point obtenerPuntoNumeroCasilla(int numero){
+        Point puntoResult = new Point(0, 0);
+        numero-=1;
+        if (numero<tablero.getTamaño()/4){
+            puntoResult.setLocation(sizeCasilla*numero, 0);
+        } else if (numero <= tablero.getTamaño() / 2) {
+            puntoResult.setLocation(sizeCasilla*(tablero.getTamaño()/4-1), sizeCasilla*((numero-tablero.getTamaño()/4)+1));
+        }else if (numero < (tablero.getTamaño() - tablero.getTamaño() / 4)) {
+            puntoResult.setLocation(sizeCasilla*tablero.getTamaño()/4 - sizeCasilla*(numero + 1 - tablero.getTamaño() / 2), sizeCasilla*(tablero.getTamaño()/4+1));
+        } else {
+            puntoResult.setLocation(0, sizeCasilla*tablero.getTamaño()/4 - sizeCasilla*(numero - (tablero.getTamaño() - tablero.getTamaño()/4)));
+        }
+        return puntoResult;
     }
     
     public Color obtenerColor(String tipo){

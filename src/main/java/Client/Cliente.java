@@ -4,24 +4,28 @@ import GUI.ClientFrame;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 
 import Models.Board;
 import Models.Message;
 import Models.MessageBoard;
+import Models.MessagePiezasDisponibles;
 import Models.MessageRequest;
 import Models.Pieza;
 
 public class Cliente {
     //Cliente/Player
-    //TODO: piezas
+    //TODO: piezas, dibujar piezas, mover piezas, casillas especiales
     private final int PORT = 35501;
     private final String IP = "localhost";
     String nombre;
     Socket socket;
     private Player player;
-    private Pieza[] piezasDisponibles = new Pieza[10];
+    private Pieza[] piezasTotales = new Pieza[10];
     ClientFrame pantalla;
     ThreadCliente threadCliente;
     private ObjectOutputStream writerStream;
@@ -44,10 +48,15 @@ public class Cliente {
             threadCliente.start();
             this.nombre = pantalla.obtenerNombre();
             escribirMensaje(new Message("Name", this.nombre, "", this.nombre));
-            
+            //solicitarPiezasDisponiblesServer();
         } catch (IOException ex) {
             
         }
+    }
+
+    public void enviarMensajeATodos(String texto){
+        Message mensaje = new Message("broadcast", getNombre(), "todos", texto);
+        escribirMensaje(mensaje);
     }
 
     public void escribirMensaje(Message msg){
@@ -69,19 +78,84 @@ public class Cliente {
         System.out.println("Piezas solicitadas");
     }
 
+    public void enviarPiezasDisponiblesActualizadas(){
+        MessagePiezasDisponibles piezasActualizadas = new MessagePiezasDisponibles("piezas", this.nombre, "server", "piezas", piezasTotales);
+        escribirMensaje(piezasActualizadas);
+    }
+
+    public void habilitarPiezaSeleccionada(){
+        for (int i = 0; i<piezasTotales.length; i++){
+            if (piezasTotales[i].getNombre().equals(player.getPieza().getNombre())){
+                setPiezasTotales(habilitarPieza(i));
+                break;
+            }
+        }
+    }
+
+    public void deshabilitarPiezaSeleccionada(){
+        for (int i = 0; i<piezasTotales.length; i++){
+            if (piezasTotales[i].getNombre() == player.getPieza().getNombre()){
+                setPiezasTotales(eliminarPieza(i));
+                break;
+            }
+        }
+    }
+
     public String[] obtenerStringPiezasDisponibles(){
-        String[] stringPiezasDisponibles = new String[piezasDisponibles.length];
-        for (int i = 0; i<piezasDisponibles.length; i++){
+        String[] stringPiezasDisponibles = new String[cantidadPiezasDisponibles()];
+        Pieza[] piezasDisponibles = obtenerPiezasDisponibles();
+        for (int i = 0; i<cantidadPiezasDisponibles(); i++){
             stringPiezasDisponibles[i] = piezasDisponibles[i].getNombre();
         }
         return stringPiezasDisponibles;
     }
 
+    public int cantidadPiezasDisponibles(){
+        int cantidad = 0;
+        for (int i = 0; i<piezasTotales.length; i++){
+            if (piezasTotales[i].isDisponible()){
+                cantidad+=1;
+            }
+        }
+        return cantidad;
+    }
+
+    public Pieza[] obtenerPiezasDisponibles(){
+        ArrayList<Pieza> piezasDisponibles = new ArrayList<>();
+        for (int i = 0; i<piezasTotales.length; i++){
+            if (piezasTotales[i].isDisponible()){
+                piezasDisponibles.add(piezasTotales[i]);
+            }
+        }
+        return piezasDisponibles.toArray(new Pieza[0]);
+    } 
+
+    public Pieza[] habilitarPieza(int indice){
+        Pieza[] piezasActualizado = piezasTotales;
+        for (int i = 0; i<piezasTotales.length; i++){
+            if (i == indice){
+                piezasActualizado[i].setDisponible(true);
+                break;
+            }
+        }
+        return piezasActualizado;
+    }
+
+    public Pieza[] eliminarPieza(int indice){
+        Pieza[] piezasActualizado = piezasTotales;
+        for (int i = 0; i<piezasTotales.length; i++){
+            if (i == indice){
+                piezasActualizado[i].setDisponible(false);
+            }
+        }
+        return piezasActualizado;
+    }
+
     public Pieza obtenerPiezaDesdeString(String piezaString){
         Pieza piezaSeleccionada = null;
-        for (int i = 0; i<piezasDisponibles.length; i++){
-            if (piezasDisponibles[i].getNombre() == piezaString){
-                piezaSeleccionada = piezasDisponibles[i];
+        for (int i = 0; i<piezasTotales.length; i++){
+            if (piezasTotales[i].getNombre() == piezaString){
+                piezaSeleccionada = piezasTotales[i];
             }
         }
         return piezaSeleccionada;
@@ -120,12 +194,12 @@ public class Cliente {
         this.tablero = tablero;
     }
 
-    public Pieza[] getPiezasDisponibles() {
-        return piezasDisponibles;
+    public Pieza[] getPiezasTotales() {
+        return piezasTotales;
     }
 
-    public void setPiezasDisponibles(Pieza[] piezasDisponibles) {
-        this.piezasDisponibles = piezasDisponibles;
+    public void setPiezasTotales(Pieza[] piezasTotales) {
+        this.piezasTotales = piezasTotales;
     }
     
     

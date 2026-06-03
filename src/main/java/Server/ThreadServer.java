@@ -53,18 +53,22 @@ public class ThreadServer extends Thread{
                         case "piezasDisponibles":
                             MessagePiezasDisponibles piezasDisponibles = new MessagePiezasDisponibles("piezas", "Server", this.nombre, "", servidor.getPiezasDisponibles());
                             servidor.sendPrivateMessage(piezasDisponibles);
-                            System.out.println("Piezas enviadas");
+                            System.out.println("Piezas enviadas a " + this.nombre);
                             break;
                     
                         default:
                             break;
                     }
                     writerStream.writeObject(new Message("NameConfirmation", "Servidor", nombre, "Tu TS recibió tu nombre"));
-                }/*else if (mensajeRecibido.tipo.equals("Broadcast")){
+                }else if (mensajeRecibido instanceof MessagePiezasDisponibles){
+                    MessagePiezasDisponibles piezasDisponibles = (MessagePiezasDisponibles) mensajeRecibido;
+                    servidor.setPiezasDisponibles(piezasDisponibles.getPiezasDisponibles());
+                    piezasDisponibles = new MessagePiezasDisponibles("piezas", "Server", this.nombre, "", servidor.getPiezasDisponibles());
+                    servidor.broadcast(piezasDisponibles);
+                    System.out.println("Piezas servidor actualizadas");
+                }else if (mensajeRecibido.tipo.equals("broadcast")){
                     servidor.broadcast(mensajeRecibido);
-                }else if (mensajeRecibido.tipo.equals("Private")){
-                    servidor.sendPrivateMessage(mensajeRecibido);
-                }else if (mensajeRecibido.tipo.equals("Disparo")){
+                }/*else if (mensajeRecibido.tipo.equals("Disparo")){
                     servidor.sendPrivateMessage(mensajeRecibido);
                 }*/
                 

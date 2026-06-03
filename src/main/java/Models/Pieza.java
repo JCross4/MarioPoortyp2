@@ -7,10 +7,13 @@ public class Pieza implements Serializable{
     private Color color;
     private String figura;
     private String nombre;
+    private boolean disponible;
+
 
     public Pieza(Color color, String figura){
         this.color = color;
         this.figura = figura;
+        this.disponible = true;
     }
 
     public String getNombre() {
@@ -27,6 +30,14 @@ public class Pieza implements Serializable{
 
     public void setFigura(String figura) {
         this.figura = figura;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
     
 }

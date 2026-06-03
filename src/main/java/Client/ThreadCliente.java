@@ -39,7 +39,7 @@ public class ThreadCliente extends Thread{
                     cliente.crearTecladoRecibido(boardRecibido);
                 } else if (mensajeRecibido.tipo.equals( "piezas")){
                     MessagePiezasDisponibles piezasDisponiblesServer = (MessagePiezasDisponibles) mensajeRecibido;
-                    cliente.setPiezasDisponibles(piezasDisponiblesServer.getPiezasDisponibles());
+                    cliente.setPiezasTotales(piezasDisponiblesServer.getPiezasDisponibles());
                 } else{
                     cliente.pantalla.agregarMensaje(mensajeRecibido.emisor+ ": "+ mensajeRecibido.mensaje);
                 }
