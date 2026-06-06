@@ -18,6 +18,10 @@ public class Player {
         return new Random().nextInt(6) + 1;
     }
 
+    public void avanzar(int casillas){
+        setPosicion(getPosicion()+casillas);
+    }
+
     public int[] realizarTirada(){
         try {
             int turnosPerdidos = 0;
@@ -53,6 +57,19 @@ public class Player {
         return tiradaString;
     }
 
+    public int obtenerMovimientosTirada(int[] tiradaDados){
+        int tiradaInt = 0;
+        for (int i = 0; i<2; i++){
+            if (tiradaDados[i] == 6){
+                tiradaInt += 0;
+            }
+            else{
+                tiradaInt += (tiradaDados[i]);
+            }
+        }
+        return tiradaInt;
+    }
+
     public int getTurnosPendientes() {
         return turnosPendientes;
     }
@@ -68,6 +85,14 @@ public class Player {
 
     public void setPieza(Pieza pieza) {
         this.pieza = pieza;
+    }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
     }
 
     

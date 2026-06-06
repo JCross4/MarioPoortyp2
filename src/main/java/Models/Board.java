@@ -2,40 +2,45 @@ package Models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Arrays;
 
 public class Board implements Serializable{
     //Atributos
-    //TODO: Crear tablero y dibujarlo en server y en cliente
-
     private ArrayList<Casilla> casillas;
     private int tamaño;
 
     public Board(){
         casillas = new ArrayList<>();
-        tamaño = 40;
+        tamaño = 26;
         inicializarTablero();
     }
 
     //Inicializar tablero
     private void inicializarTablero() {
-        for (int i = 0; i < tamaño; i++) {
-            String tipo = "normal";
-            int valor = 0;
-            
-            // Define special spaces temp
-            if (i % 10 == 0) {
-                tipo = "especial";
-                valor = 200;
-            } else if (i % 7 == 0) {
-                tipo = "trampa";
-                valor = -100;
-            } else if (i % 5 == 0 && i % 10 != 0) {
-                tipo = "premio";
-                valor = 50;
-            }
-            
-            Casilla casilla = new Casilla(i, tipo, valor);
-            casillas.add(casilla);
+        ArrayList<Casilla> casillasTempo = new ArrayList<>();
+        int numero = 0;
+        
+        // Crear 9 juegos, 2 veces cada uno (18 casillas)
+        Casilla.TipoJuego[] juegos = Casilla.TipoJuego.values();
+        for (Casilla.TipoJuego juego : juegos) {
+            casillasTempo.add(new Casilla(numero++, juego));
+            casillasTempo.add(new Casilla(numero++, juego));
+        }
+        
+        // Crear 8 comodines
+        Casilla.TipoComodin[] comodines = Casilla.TipoComodin.values();
+        for (Casilla.TipoComodin comodin : comodines) {
+            casillasTempo.add(new Casilla(numero++, comodin));
+        }
+        
+        // Mezclar aleatoriamente
+        Collections.shuffle(casillasTempo);
+        
+        // Reasignar números en orden y agregar al tablero
+        for (int i = 0; i < casillasTempo.size(); i++) {
+            casillasTempo.get(i).setNumero(i);
+            casillas.add(casillasTempo.get(i));
         }
     }
 

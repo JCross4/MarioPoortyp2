@@ -3,11 +3,14 @@ package Models;
 import java.awt.Color;
 import java.io.Serializable;
 
+import javax.swing.JLabel;
+
 public class Pieza implements Serializable{
     private Color color;
     private String figura;
     private String nombre;
     private boolean disponible;
+    private JLabel label;
 
 
     public Pieza(Color color, String figura){
@@ -38,6 +41,22 @@ public class Pieza implements Serializable{
 
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
+    }
+
+    public JLabel getLabel() {
+        return label;
+    }
+
+    public void setLabel(JLabel label) {
+        this.label = label;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
     
 }

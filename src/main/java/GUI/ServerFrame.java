@@ -11,6 +11,7 @@ import javax.swing.border.Border;
 import Models.Board;
 import Models.Casilla;
 import Models.MessageBoard;
+import Models.Pieza;
 import Server.Server;
 
 import java.awt.Color;
@@ -51,6 +52,7 @@ public class ServerFrame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         labelNClientesConectados = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        buttonNextTurn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +92,9 @@ public class ServerFrame extends javax.swing.JFrame {
         jButton2.setText("Crear Tablero");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
+        buttonNextTurn.setText("Siguiente turno");
+        buttonNextTurn.addActionListener(this::buttonNextTurnActionPerformed);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -99,6 +104,8 @@ public class ServerFrame extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonNextTurn)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton1)
@@ -118,7 +125,9 @@ public class ServerFrame extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(labelNClientesConectados))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(buttonNextTurn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -144,6 +153,7 @@ public class ServerFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         server.getThreadConexiones().start();
+        server.inicializarTurno();
         jTextArea1.setText("Iniciado");
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -155,6 +165,11 @@ public class ServerFrame extends javax.swing.JFrame {
         dibujarTablero(tablero);
         server.broadcast(new MessageBoard("board", "server", "all", "tablero", tablero));
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void buttonNextTurnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextTurnActionPerformed
+        // TODO add your handling code here:
+        server.siguienteTurno();
+    }//GEN-LAST:event_buttonNextTurnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,6 +197,7 @@ public class ServerFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonNextTurn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -205,6 +221,24 @@ public class ServerFrame extends javax.swing.JFrame {
         creadorTablero.dibujarTablero();
     }
     
+    public void dibujarPieza(int posicion, Pieza pieza, String nombre){
+        System.out.println("Pieza dibujada");
+        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, server.getTablero());
+        Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
+        JLabel label = boardDrawer.dibujarPiezaEnServer(punto, pieza);
+        //Agregar al array de labels existentes serverside
+        int indice = server.getNombresPlayers().indexOf(nombre);
+        server.getLabelsPlayers().set(indice, label);
+    }
+
+    public void moverPiezaExistente(int posicion, Pieza pieza, String nombre){
+        System.out.println("Pieza movida");
+        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, server.getTablero());
+        Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
+        JLabel label = server.obtenerLabel(nombre);
+        boardDrawer.moverPiezaExistente(punto, label);
+        //mover label del array de labels segun indice de nombre
+    }
 
     public int getSizeCasilla() {
         return sizeCasilla;

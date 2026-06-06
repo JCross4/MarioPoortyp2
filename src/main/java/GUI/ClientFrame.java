@@ -14,6 +14,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -36,6 +37,7 @@ public class ClientFrame extends javax.swing.JFrame {
         cliente = new Cliente(this);
         //cliente.solicitarPiezasDisponiblesServer();
         jTextArea1.append(cliente.getNombre());
+        jButton1.setEnabled(false); // Disable the button until it's the player's turn
         //cliente.getPlayer().setPieza(obtenerPieza());
         //cliente.eliminarPiezaSeleccionada();
         //cliente.enviarPiezasDisponiblesActualizadas();
@@ -131,10 +133,20 @@ public class ClientFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        int[] resultTirada = cliente.getPlayer().realizarTirada();
-        String tiradaString = cliente.getPlayer().obtenerStringTirada(resultTirada);
-        Message m = new Message("Broadcast", cliente.getNombre(), "", "La tirada resulta en: " + tiradaString);
-        cliente.escribirMensaje(m);
+        if (!cliente.isTurnoActual()) {
+            JOptionPane.showMessageDialog(this, "No es tu turno aún. Espera a que el servidor te notifique.");
+            return;
+        }
+        cliente.realizarLanzamientoDeDados();
+        if (cliente.getPlayer().getPieza().getLabel() == null){
+            dibujarPiezaPropia(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
+        }
+        else{
+            moverPiezaPropiaExistente(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
+        }
+        //TODO: Identificar casilla en la que cae, postear mensaje indicando
+        cliente.checkCasillaActual();
+        
         //dibujarTablero(cliente.getTablero());
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -218,11 +230,45 @@ public class ClientFrame extends javax.swing.JFrame {
         }
     }
 
-    public void dibujarPieza(int posicion, Pieza pieza, String nombre){
-        System.out.println("Pieza dibujada");
+    public void dibujarPiezaPropia(int posicion, Pieza pieza, String nombre){
+        System.out.println("Pieza dibujada propia");
         BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, cliente.getTablero());
         Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
-        boardDrawer.dibujarPieza(punto, pieza);
+        boardDrawer.dibujarPiezaEnClientePropio(punto, pieza);
+    }
+
+    public void moverPiezaPropiaExistente(int posicion, Pieza pieza, String nombre){
+        System.out.println("Pieza movida");
+        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, cliente.getTablero());
+        Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
+        boardDrawer.moverPiezaExistente(punto, pieza.getLabel());
+    }
+
+    public void dibujarPiezaOtroCliente(int posicion, Pieza pieza, String nombre){
+        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, cliente.getTablero());
+        Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
+        JLabel label = boardDrawer.dibujarPiezaEnServer(punto, pieza);
+        //Agregar al array de labels existentes serverside
+        int indice = cliente.getNombresOtrosPlayers().indexOf(nombre);
+        cliente.getLabelsOtrosPlayers().set(indice, label);
+        System.out.println("Label de otro player agregado");
+    }
+
+    public void moverPiezaExistenteOtroCliente(int posicion, Pieza pieza, String nombre){
+        System.out.println("Pieza movida otro player");
+        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, cliente.getTablero());
+        Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
+        JLabel label = cliente.obtenerLabel(nombre);
+        boardDrawer.moverPiezaExistente(punto, label);
+    }
+
+    public void actualizarEstadoBotonTirada(boolean estuTurno) {
+        jButton1.setEnabled(estuTurno);
+        if (estuTurno) {
+            agregarMensaje("¡Es tu turno! Puedes lanzar los dados.\n");
+        } else {
+            agregarMensaje("Es el turno de otro jugador. Espera tu turno.\n");
+        }
     }
 
 }

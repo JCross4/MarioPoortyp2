@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.annotation.processing.Messager;
+import javax.swing.JLabel;
 
 import Models.Message;
+import Models.MessageNombres;
+import Models.MessagePieza;
 import Models.MessagePiezasDisponibles;
 import Models.MessageRequest;
 
@@ -46,6 +50,19 @@ public class ThreadServer extends Thread{
                         mensajeRecibido + "\n" );
                 if (mensajeRecibido.tipo.equals("Name")){
                     this.nombre = mensajeRecibido.mensaje;
+                    //Enviarle al nuevo cliente el array de nombres existente, enviarle a los demás el nombre del nuevo cliente
+                    MessageNombres nombres = new MessageNombres("nombres", "server", getNombre(), "nombres", servidor.getNombresPlayers());
+                    servidor.sendPrivateMessage(nombres);
+
+                    //Añadir el nuevo nombre a los nombres y labels del server
+                    ArrayList<String> nombresPlayers = servidor.getNombresPlayers();
+                    nombresPlayers.add(mensajeRecibido.mensaje);
+                    ArrayList<JLabel> labelsPlayers = servidor.getLabelsPlayers();
+                    labelsPlayers.add(null);
+                    servidor.setNombresPlayers(nombresPlayers);
+                    servidor.setLabelsPlayers(labelsPlayers);
+                    
+                    servidor.broadcastExcept(mensajeRecibido, this.nombre);
                 } else if (mensajeRecibido instanceof MessageRequest){
                     MessageRequest request = (MessageRequest) mensajeRecibido;
                     System.out.println(request.getTipoRequest());
@@ -68,9 +85,12 @@ public class ThreadServer extends Thread{
                     System.out.println("Piezas servidor actualizadas");
                 }else if (mensajeRecibido.tipo.equals("broadcast")){
                     servidor.broadcast(mensajeRecibido);
-                }/*else if (mensajeRecibido.tipo.equals("Disparo")){
-                    servidor.sendPrivateMessage(mensajeRecibido);
-                }*/
+                }else if (mensajeRecibido instanceof MessagePieza){
+                    MessagePieza mensajePieza = (MessagePieza) mensajeRecibido;
+                    //Enviar el movimiento a los otros clientes y dibujarlo en serverside
+                    servidor.broadcastExcept(mensajePieza, nombre);
+                    servidor.dibujarPieza(this.nombre, mensajePieza.getPieza(), mensajePieza.getNuevaPosicion());
+                }
                 
                 //TODO: procesar el mensaje recibido
                 // if tipo == ... then haga x
@@ -78,9 +98,9 @@ public class ThreadServer extends Thread{
                 //mensaje individual
                 
             } catch (Exception ex) {
-                //servidor.serverForm.escribirMensaje(ex.getMessage());
+                servidor.getPantalla().agregarMensaje(ex.getMessage());
                 isRunning = false;
-        }
+            }
     }
 }
 

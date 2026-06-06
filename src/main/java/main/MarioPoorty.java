@@ -9,6 +9,8 @@ import GUI.ServerFrame;
  */
 public class MarioPoorty 
 {
+
+    //TODOS: Minijuegos - Comodines -- quitar souts
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
