@@ -57,9 +57,20 @@ public class ClientFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButtonPieza = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        labelDado1 = new javax.swing.JLabel();
+        labelDado2 = new javax.swing.JLabel();
+        labelRDado1 = new javax.swing.JLabel();
+        labelRDado2 = new javax.swing.JLabel();
+        labelDadoTotal = new javax.swing.JLabel();
+        labelRDadoTotal = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        textAreaChat = new javax.swing.JTextArea();
+        labelChat = new javax.swing.JLabel();
+        textFieldChat = new javax.swing.JTextField();
+        buttonEnviarChat = new javax.swing.JButton();
 
         jRadioButton1.setText("jRadioButton1");
 
@@ -73,44 +84,134 @@ public class ClientFrame extends javax.swing.JFrame {
         jButtonPieza.setText("Seleccionar pieza");
         jButtonPieza.addActionListener(this::jButtonPiezaActionPerformed);
 
+        labelDado1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        labelDado1.setForeground(new java.awt.Color(0, 0, 0));
+        labelDado1.setText("Dado 1:");
+
+        labelDado2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        labelDado2.setForeground(new java.awt.Color(0, 0, 0));
+        labelDado2.setText("Dado 2:");
+
+        labelRDado1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        labelRDado1.setForeground(new java.awt.Color(0, 0, 0));
+        labelRDado1.setText("0");
+
+        labelRDado2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        labelRDado2.setForeground(new java.awt.Color(0, 0, 0));
+        labelRDado2.setText("0");
+
+        labelDadoTotal.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        labelDadoTotal.setForeground(new java.awt.Color(0, 0, 0));
+        labelDadoTotal.setText("Total:");
+
+        labelRDadoTotal.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        labelRDadoTotal.setForeground(new java.awt.Color(0, 0, 0));
+        labelRDadoTotal.setText("0");
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
+        jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setRows(5);
+        jTextArea1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED, java.awt.Color.red, java.awt.Color.black));
+        jScrollPane2.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonPieza)
-                .addContainerGap(211, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonPieza)
+                        .addGap(61, 61, 61)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelDado2)
+                            .addComponent(labelDado1)
+                            .addComponent(labelDadoTotal))
+                        .addGap(39, 39, 39)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(labelRDado2, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                            .addComponent(labelRDado1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelRDadoTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE))
+                        .addGap(26, 26, 26))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelDado1)
+                    .addComponent(labelRDado1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelDado2)
+                    .addComponent(labelRDado2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelDadoTotal)
+                    .addComponent(labelRDadoTotal))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jButtonPieza))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButtonPieza)
-                        .addGap(21, 21, 21))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2))))
         );
 
-        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        textAreaChat.setEditable(false);
+        textAreaChat.setColumns(20);
+        textAreaChat.setRows(5);
+        jScrollPane1.setViewportView(textAreaChat);
+
+        labelChat.setFont(new java.awt.Font("Franklin Gothic Book", 3, 18)); // NOI18N
+        labelChat.setText("Chat");
+
+        textFieldChat.setToolTipText("Escribir mensaje");
+
+        buttonEnviarChat.setText("Enviar");
+        buttonEnviarChat.addActionListener(this::buttonEnviarChatActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelChat, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(textFieldChat, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonEnviarChat)))
+                .addGap(0, 9, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(labelChat)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textFieldChat, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonEnviarChat))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -137,17 +238,26 @@ public class ClientFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No es tu turno aún. Espera a que el servidor te notifique.");
             return;
         }
-        cliente.realizarLanzamientoDeDados();
-        if (cliente.getPlayer().getPieza().getLabel() == null){
-            dibujarPiezaPropia(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
+        if (cliente.getPlayer().getTurnosPendientes() != 0){
+            actualizarEstadoBotonTirada(false);
+            JOptionPane.showMessageDialog(this, "Tiene turnos pendientes, no puede jugar este turno");
+            cliente.getPlayer().setTurnosPendientes(cliente.getPlayer().getTurnosPendientes()-1);
         }
         else{
-            moverPiezaPropiaExistente(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
-        }
+            cliente.realizarLanzamientoDeDados();
+            if (cliente.getPlayer().getPieza().getLabel() == null){
+                dibujarPiezaPropia(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
+            } else{
+                moverPiezaPropiaExistente(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
+            }
         //TODO: Identificar casilla en la que cae, postear mensaje indicando
-        cliente.checkCasillaActual();
+            if (cliente.checkCasillaFinal()){
+                mostrarMensaje("Ha llegado a la última casilla y ha ganado!");
+            }
+            actualizarEstadoBotonTirada(false);
+            cliente.checkCasillaActual();
+        }
         
-        //dibujarTablero(cliente.getTablero());
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonPiezaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPiezaActionPerformed
@@ -155,6 +265,11 @@ public class ClientFrame extends javax.swing.JFrame {
         obtenerPieza();
         
     }//GEN-LAST:event_jButtonPiezaActionPerformed
+
+    private void buttonEnviarChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEnviarChatActionPerformed
+        // TODO add your handling code here:
+        enviarMensajeChat();
+    }//GEN-LAST:event_buttonEnviarChatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,13 +297,24 @@ public class ClientFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonEnviarChat;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonPieza;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel labelChat;
+    private javax.swing.JLabel labelDado1;
+    private javax.swing.JLabel labelDado2;
+    private javax.swing.JLabel labelDadoTotal;
+    private javax.swing.JLabel labelRDado1;
+    private javax.swing.JLabel labelRDado2;
+    private javax.swing.JLabel labelRDadoTotal;
+    private javax.swing.JTextArea textAreaChat;
+    private javax.swing.JTextField textFieldChat;
     // End of variables declaration//GEN-END:variables
 
 
@@ -213,9 +339,36 @@ public class ClientFrame extends javax.swing.JFrame {
         }
         
     }
+
+    public String obtenerOtroJugador(){
+        String nombreJugador = "";
+        if (cliente.getNombresOtrosPlayers().size()>0){
+            Object[] nombresJugadores = cliente.getNombresOtrosPlayers().toArray();
+            nombreJugador = (String) JOptionPane.showInputDialog(null, "Escoja un jugador:", "Jugador", JOptionPane.QUESTION_MESSAGE, null, nombresJugadores, nombresJugadores[0]);
+        }
+        else{
+            agregarMensaje("No hay otros jugadores");
+        }
+        
+        return nombreJugador;
+    }
+
+    public int obtenerCasillasCola(){
+        int intCantCasillas = 0;
+        String[] opciones = {"-3","-2","-1","0","1","2","3"};
+        String cantCasillas = (String) JOptionPane.showInputDialog(null, "Escoja una pieza para jugar:", "Pieza", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+        if (cantCasillas != null){
+            intCantCasillas = Integer.parseInt(cantCasillas);
+        }
+        return intCantCasillas;
+    }
     
     public void agregarMensaje(String texto){
         jTextArea1.append(texto);
+    }
+
+    public void agregarMensajeChat(Message mensaje){
+        textAreaChat.append(mensaje.emisor + ": " + mensaje.mensaje + "\n");
     }
 
     public void dibujarTablero(Board tablero){
@@ -269,6 +422,28 @@ public class ClientFrame extends javax.swing.JFrame {
         } else {
             agregarMensaje("Es el turno de otro jugador. Espera tu turno.\n");
         }
+    }
+
+    public void actualizarLabelDados(int dado, String texto){
+        if (dado == 0){
+            labelRDado1.setText(texto);
+        } else{
+            labelRDado2.setText(texto);
+        }
+    }
+
+    public void actualizarLabelDadosTotal(int total){
+        labelRDadoTotal.setText(total + "");
+    }
+    
+
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    public void enviarMensajeChat(){
+        Message mensaje = new Message("mensajeChat", cliente.getNombre(), "todos", textFieldChat.getText());
+        cliente.escribirMensaje(mensaje);
     }
 
 }

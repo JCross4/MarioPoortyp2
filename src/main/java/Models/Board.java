@@ -3,6 +3,9 @@ package Models;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import Models.Casilla.TipoComodin;
+
 import java.util.Arrays;
 
 public class Board implements Serializable{
@@ -42,6 +45,31 @@ public class Board implements Serializable{
             casillasTempo.get(i).setNumero(i);
             casillas.add(casillasTempo.get(i));
         }
+    }
+
+    public int obtenerPosicionSiguienteTubo(Casilla casillaActual){
+        TipoComodin objetivo = null;
+        int tuboSiguiente = casillaActual.getNumero();
+        switch (casillaActual.getTipoComodin()) {
+        case TUBO_1:
+            objetivo = TipoComodin.TUBO_2;
+            break;
+        case TUBO_2:
+            objetivo = TipoComodin.TUBO_3;
+            break;
+        case TUBO_3:
+            objetivo = TipoComodin.TUBO_1;
+            break;
+        default:
+            break;
+        }
+        for (Casilla casillaI : casillas){
+            if (casillaI.getTipoComodin() == objetivo){
+                tuboSiguiente = casillaI.getNumero();
+                break;
+            }
+            }
+        return tuboSiguiente + 1;
     }
 
     public ArrayList<Casilla> getCasillas() {

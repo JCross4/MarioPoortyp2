@@ -10,10 +10,12 @@ import javax.annotation.processing.Messager;
 import javax.swing.JLabel;
 
 import Models.Message;
+import Models.MessageComodin;
 import Models.MessageNombres;
 import Models.MessagePieza;
 import Models.MessagePiezasDisponibles;
 import Models.MessageRequest;
+import Models.MessageGato;
 
 public class ThreadServer extends Thread{
     private Server servidor;
@@ -63,9 +65,12 @@ public class ThreadServer extends Thread{
                     servidor.setLabelsPlayers(labelsPlayers);
                     
                     servidor.broadcastExcept(mensajeRecibido, this.nombre);
+                } else if(mensajeRecibido.tipo.equals("mensajeChat")){
+                    servidor.broadcast(mensajeRecibido);
+
                 } else if (mensajeRecibido instanceof MessageRequest){
                     MessageRequest request = (MessageRequest) mensajeRecibido;
-                    System.out.println(request.getTipoRequest());
+                    //System.out.println(request.getTipoRequest());
                     switch (request.getTipoRequest()) {
                         case "piezasDisponibles":
                             MessagePiezasDisponibles piezasDisponibles = new MessagePiezasDisponibles("piezas", "Server", this.nombre, "", servidor.getPiezasDisponibles());
@@ -90,6 +95,10 @@ public class ThreadServer extends Thread{
                     //Enviar el movimiento a los otros clientes y dibujarlo en serverside
                     servidor.broadcastExcept(mensajePieza, nombre);
                     servidor.dibujarPieza(this.nombre, mensajePieza.getPieza(), mensajePieza.getNuevaPosicion());
+                } else if (mensajeRecibido instanceof MessageGato) {
+                    servidor.sendPrivateMessage(mensajeRecibido);
+                } else if (mensajeRecibido instanceof MessageComodin){
+                    servidor.sendPrivateMessage(mensajeRecibido);
                 }
                 
                 //TODO: procesar el mensaje recibido

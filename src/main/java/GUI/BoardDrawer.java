@@ -38,6 +38,7 @@ public class BoardDrawer {
     public void dibujarCasilla(Casilla casilla, Point posicion){
         //Todo tablero debe empezar en 0,0
         JLabel nuevaCasilla = crearLabel("", posicion, sizeCasilla, sizeCasilla);
+        nuevaCasilla.setText(casilla.getNumero() + 1 + "");
         nuevaCasilla.setBackground(obtenerColor(casilla));
         nuevaCasilla.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         nuevaCasilla.setOpaque(true);

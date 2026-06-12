@@ -88,7 +88,6 @@ public class Server {
             nuevaPieza.setNombre(nuevaPieza.getFigura() + " Color " + nombresColores[i]);
             piezasDisponibles[i] = nuevaPieza;
         }
-        System.out.println("Piezas inicializadas server");
     }
 
     public void dibujarPieza(String nombre, Pieza pieza, int posicion){

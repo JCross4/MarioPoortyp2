@@ -11,9 +11,9 @@ public class MarioPoorty
 {
 
     //TODOS: Minijuegos - Comodines -- quitar souts
+    //1° Comodines
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
         ServerFrame sf = new ServerFrame();
         sf.setVisible(true);
         ClientFrame cf = new ClientFrame();
