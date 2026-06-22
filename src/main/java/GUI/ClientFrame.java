@@ -5,10 +5,9 @@
 package GUI;
 
 import Client.Cliente;
-import Models.Board;
-import Models.Message;
-import Models.MessageRequest;
-import Models.Pieza;
+import Models.Messages.Message;
+import Models.Tablero.Board;
+import Models.Tablero.Pieza;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -21,12 +20,10 @@ import javax.swing.JOptionPane;
  *
  * @author 23jic
  */
-public class ClientFrame extends javax.swing.JFrame {
+public class ClientFrame extends BoardFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ClientFrame.class.getName());
     private Cliente cliente;
-    private int casillasDibujadas;
-    private final int sizeCasilla = 30;
     
     /**
      * Creates new form ClientFrame
@@ -35,13 +32,8 @@ public class ClientFrame extends javax.swing.JFrame {
         
         initComponents();
         cliente = new Cliente(this);
-        //cliente.solicitarPiezasDisponiblesServer();
         jTextArea1.append(cliente.getNombre());
-        jButton1.setEnabled(false); // Disable the button until it's the player's turn
-        //cliente.getPlayer().setPieza(obtenerPieza());
-        //cliente.eliminarPiezaSeleccionada();
-        //cliente.enviarPiezasDisponiblesActualizadas();
-        //TODO: Eliminar pieza de las piezas disponibles en server
+        jButton1.setEnabled(false); 
     }
 
     /**
@@ -65,6 +57,10 @@ public class ClientFrame extends javax.swing.JFrame {
         labelRDadoTotal = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        labelDado3 = new javax.swing.JLabel();
+        labelDado4 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaChat = new javax.swing.JTextArea();
@@ -116,6 +112,28 @@ public class ClientFrame extends javax.swing.JFrame {
         jTextArea1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED, java.awt.Color.red, java.awt.Color.black));
         jScrollPane2.setViewportView(jTextArea1);
 
+        labelDado3.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        labelDado3.setForeground(new java.awt.Color(0, 0, 0));
+        labelDado3.setText("Comodín");
+
+        labelDado4.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        labelDado4.setForeground(new java.awt.Color(0, 0, 0));
+        labelDado4.setText("Juego");
+
+        jLabel2.setBackground(new java.awt.Color(0, 255, 51));
+        jLabel2.setText("   ");
+        jLabel2.setMaximumSize(new java.awt.Dimension(15, 15));
+        jLabel2.setMinimumSize(new java.awt.Dimension(15, 15));
+        jLabel2.setOpaque(true);
+        jLabel2.setPreferredSize(new java.awt.Dimension(15, 15));
+
+        jLabel3.setBackground(new java.awt.Color(0, 0, 255));
+        jLabel3.setText("   ");
+        jLabel3.setMaximumSize(new java.awt.Dimension(15, 15));
+        jLabel3.setMinimumSize(new java.awt.Dimension(15, 15));
+        jLabel3.setOpaque(true);
+        jLabel3.setPreferredSize(new java.awt.Dimension(15, 15));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -124,9 +142,19 @@ public class ClientFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonPieza)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonPieza))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(labelDado4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(labelDado3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(61, 61, 61)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
                         .addContainerGap())
@@ -158,16 +186,19 @@ public class ClientFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelDadoTotal)
                     .addComponent(labelRDadoTotal))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButtonPieza))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelDado3)
+                    .addComponent(labelDado4)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButtonPieza)))
         );
 
         textAreaChat.setEditable(false);
@@ -203,7 +234,7 @@ public class ClientFrame extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addComponent(labelChat)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -233,7 +264,7 @@ public class ClientFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        agregarMensaje(cliente.getLog() + "\n\n");
         if (!cliente.isTurnoActual()) {
             JOptionPane.showMessageDialog(this, "No es tu turno aún. Espera a que el servidor te notifique.");
             return;
@@ -244,30 +275,40 @@ public class ClientFrame extends javax.swing.JFrame {
             cliente.getPlayer().setTurnosPendientes(cliente.getPlayer().getTurnosPendientes()-1);
         }
         else{
-            cliente.realizarLanzamientoDeDados();
-            if (cliente.getPlayer().getPieza().getLabel() == null){
-                dibujarPiezaPropia(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
-            } else{
-                moverPiezaPropiaExistente(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
+            //Revisar si falló el último turno en el juego y repetir
+            if (!cliente.isUltimoJuegoGanado()){
+                cliente.getPantalla().mostrarMensaje("Debe completar el juego del turno anterior para poder lanzar los dados.");
+                actualizarEstadoBotonTirada(false);
+                cliente.checkCasillaActual();
             }
-        //TODO: Identificar casilla en la que cae, postear mensaje indicando
-            if (cliente.checkCasillaFinal()){
-                mostrarMensaje("Ha llegado a la última casilla y ha ganado!");
+            if (cliente.isUltimoJuegoGanado()){
+                cliente.realizarLanzamientoDeDados();
+                if (cliente.getPlayer().getPieza().getLabel() == null){
+                    dibujarPiezaPropia(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
+                } else{
+                    moverPiezaPropiaExistente(cliente.getPlayer().getPosicion(), cliente.getPlayer().getPieza(), cliente.getNombre());
+                }
+                if (cliente.checkCasillaFinal()){
+                    mostrarMensaje("Ha llegado a la última casilla y ha ganado!");
+                    return;
+                }
+                actualizarEstadoBotonTirada(false);
+                cliente.checkCasillaActual();
             }
-            actualizarEstadoBotonTirada(false);
-            cliente.checkCasillaActual();
+            
+            
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonPiezaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPiezaActionPerformed
-        // TODO add your handling code here:
+        
         obtenerPieza();
         
     }//GEN-LAST:event_jButtonPiezaActionPerformed
 
     private void buttonEnviarChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEnviarChatActionPerformed
-        // TODO add your handling code here:
+        
         enviarMensajeChat();
     }//GEN-LAST:event_buttonEnviarChatActionPerformed
 
@@ -300,6 +341,8 @@ public class ClientFrame extends javax.swing.JFrame {
     private javax.swing.JButton buttonEnviarChat;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonPieza;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
@@ -309,6 +352,8 @@ public class ClientFrame extends javax.swing.JFrame {
     private javax.swing.JLabel labelChat;
     private javax.swing.JLabel labelDado1;
     private javax.swing.JLabel labelDado2;
+    private javax.swing.JLabel labelDado3;
+    private javax.swing.JLabel labelDado4;
     private javax.swing.JLabel labelDadoTotal;
     private javax.swing.JLabel labelRDado1;
     private javax.swing.JLabel labelRDado2;
@@ -372,7 +417,7 @@ public class ClientFrame extends javax.swing.JFrame {
     }
 
     public void dibujarTablero(Board tablero){
-        BoardDrawer creadorTablero = new BoardDrawer(jPanel1, sizeCasilla, casillasDibujadas, tablero);
+        BoardDrawer creadorTablero = new BoardDrawer(jPanel1, getAnchoCasilla(), getAltoCasilla(), getCasillasDibujadas(), tablero);
         creadorTablero.dibujarTablero();
     }
 
@@ -384,32 +429,32 @@ public class ClientFrame extends javax.swing.JFrame {
     }
 
     public void dibujarPiezaPropia(int posicion, Pieza pieza, String nombre){
-        System.out.println("Pieza dibujada propia");
-        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, cliente.getTablero());
+        //System.out.println("Pieza dibujada propia");
+        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, getAnchoCasilla(), getAltoCasilla(), 0, cliente.getTablero());
         Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
         boardDrawer.dibujarPiezaEnClientePropio(punto, pieza);
     }
 
     public void moverPiezaPropiaExistente(int posicion, Pieza pieza, String nombre){
-        System.out.println("Pieza movida");
-        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, cliente.getTablero());
+        //System.out.println("Pieza movida");
+        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, getAnchoCasilla(), getAltoCasilla(), 0, cliente.getTablero());
         Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
         boardDrawer.moverPiezaExistente(punto, pieza.getLabel());
     }
 
     public void dibujarPiezaOtroCliente(int posicion, Pieza pieza, String nombre){
-        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, cliente.getTablero());
+        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, getAnchoCasilla(), getAltoCasilla(), 0, cliente.getTablero());
         Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
         JLabel label = boardDrawer.dibujarPiezaEnServer(punto, pieza);
         //Agregar al array de labels existentes serverside
         int indice = cliente.getNombresOtrosPlayers().indexOf(nombre);
         cliente.getLabelsOtrosPlayers().set(indice, label);
-        System.out.println("Label de otro player agregado");
+        //System.out.println("Label de otro player agregado");
     }
 
     public void moverPiezaExistenteOtroCliente(int posicion, Pieza pieza, String nombre){
-        System.out.println("Pieza movida otro player");
-        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, sizeCasilla, 0, cliente.getTablero());
+        //System.out.println("Pieza movida otro player");
+        BoardDrawer boardDrawer = new BoardDrawer(jPanel1, getAnchoCasilla(), getAltoCasilla(), 0, cliente.getTablero());
         Point punto = boardDrawer.obtenerPuntoNumeroCasilla(posicion);
         JLabel label = cliente.obtenerLabel(nombre);
         boardDrawer.moverPiezaExistente(punto, label);

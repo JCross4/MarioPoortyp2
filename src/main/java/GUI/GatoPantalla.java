@@ -1,8 +1,8 @@
 package GUI;
 
 import Client.Cliente;
-import Models.GatoJuego;
-import Models.MessageGato;
+import Models.Juegos.GatoJuego;
+import Models.Messages.MessageGato;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,34 +13,33 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 public class GatoPantalla extends JDialog {
-
-    private final Cliente cliente;
-    private final String opponentName;
-    private final String mySymbol;
-    private final String opponentSymbol;
-    private boolean myTurn;
-    private final char[] board = new char[9];
+//Mover lógica a gatoJuego
+    
     private final JButton[] buttons = new JButton[9];
     private final JLabel statusLabel = new JLabel();
     private GatoJuego gatoJuego;
+    private boolean myTurn;
+    private String oponente;
+    private String mySymbol;
+    private String oponenteSymbol;
+    private Cliente player;
 
-    public GatoPantalla(ClientFrame parent, Cliente cliente, String opponentName, boolean myTurn, String mySymbol, GatoJuego juego) {
-        super(parent, "Gato / Tic Tac Toe contra " + opponentName, false);
-        this.cliente = cliente;
+    public GatoPantalla(ClientFrame parent, Cliente cliente, boolean myTurn, String mySymbol, GatoJuego juego) {
+        super(parent, "Gato / Tic Tac Toe contra " + juego.getOponente(cliente.getNombre()), false);
         this.gatoJuego = juego;
-        this.opponentName = opponentName;
+        this.oponente = juego.getOponente(cliente.getNombre());
+        this.myTurn = myTurn;
         this.mySymbol = mySymbol;
+        this.player = cliente;
         if (mySymbol.equals("X")){
-            this.opponentSymbol = "O";
+            this.oponenteSymbol = "O";
         }
         else{
-            this.opponentSymbol = "X";
+            this.oponenteSymbol = "X";
         }
-        this.myTurn = myTurn;
-        Arrays.fill(board, ' ');
+        
         initComponents();
         setLocationRelativeTo(parent);
         setResizable(false);
@@ -73,16 +72,16 @@ public class GatoPantalla extends JDialog {
             JOptionPane.showMessageDialog(this, "No es tu turno.");
             return;
         }
-        if (board[position] != ' ') {
+        if (gatoJuego.getBoard()[position] != ' ') {
             return;
         }
-        board[position] = mySymbol.charAt(0);
+        gatoJuego.getBoard()[position] = mySymbol.charAt(0);
         buttons[position].setText(mySymbol);
         buttons[position].setEnabled(false);
         sendMove(position);
         if (checkWinner(mySymbol)) {
             statusLabel.setText("¡Ganaste!");
-            JOptionPane.showMessageDialog(this, "Ganaste el juego de Gato contra " + opponentName + "!");
+            JOptionPane.showMessageDialog(this, "Ganaste el juego de Gato contra " + oponente + "!");
             dispose();
             return;
         }
@@ -97,11 +96,11 @@ public class GatoPantalla extends JDialog {
     }
 
     private void sendMove(int position) {
-        String boardState = new String(board);
+        String boardState = new String(gatoJuego.getBoard());
         MessageGato moveMessage = new MessageGato(
                 "Gato",
-                cliente.getNombre(),
-                opponentName,
+                player.getNombre(),
+                oponente,
                 "Gato move",
                 gatoJuego,
                 "move",
@@ -110,7 +109,7 @@ public class GatoPantalla extends JDialog {
                 boardState,
                 "inprogress"
         );
-        cliente.escribirMensaje(moveMessage);
+        player.escribirMensaje(moveMessage);
     }
 
     public void receiveOpponentMessage(MessageGato message) {
@@ -120,14 +119,14 @@ public class GatoPantalla extends JDialog {
         if ("move".equals(message.getAction())) {
             String boardState = message.getBoardState();
             for (int i = 0; i < 9 && i < boardState.length(); i++) {
-                board[i] = boardState.charAt(i);
-                String text = board[i] == ' ' ? " " : String.valueOf(board[i]);
+                gatoJuego.getBoard()[i] = boardState.charAt(i);
+                String text = gatoJuego.getBoard()[i] == ' ' ? " " : String.valueOf(gatoJuego.getBoard()[i]);
                 buttons[i].setText(text);
-                buttons[i].setEnabled(board[i] == ' ');
+                buttons[i].setEnabled(gatoJuego.getBoard()[i] == ' ');
             }
-            if (checkWinner(opponentSymbol)) {
+            if (checkWinner(oponenteSymbol)) {
                 statusLabel.setText("Perdiste.");
-                JOptionPane.showMessageDialog(this, "Perdiste el juego de Gato contra " + opponentName + ".");
+                JOptionPane.showMessageDialog(this, "Perdiste el juego de Gato contra " + oponente + ".");
                 dispose();
                 return;
             }
@@ -155,7 +154,7 @@ public class GatoPantalla extends JDialog {
                 {2, 4, 6}
         };
         for (int[] combo : wins) {
-            if (board[combo[0]] == mark && board[combo[1]] == mark && board[combo[2]] == mark) {
+            if (gatoJuego.getBoard()[combo[0]] == mark && gatoJuego.getBoard()[combo[1]] == mark && gatoJuego.getBoard()[combo[2]] == mark) {
                 return true;
             }
         }
@@ -163,7 +162,7 @@ public class GatoPantalla extends JDialog {
     }
 
     private boolean isBoardFull() {
-        for (char c : board) {
+        for (char c : gatoJuego.getBoard()) {
             if (c == ' ') {
                 return false;
             }
@@ -172,7 +171,7 @@ public class GatoPantalla extends JDialog {
     }
 
     private void updateStatusLabel() {
-        String turnText = myTurn ? "Tu turno" : "Turno de " + opponentName;
-        statusLabel.setText("Juego Gato contra " + opponentName + " - Tú eres " + mySymbol + ". " + turnText);
+        String turnText = myTurn ? "Tu turno" : "Turno de " + oponente;
+        statusLabel.setText("Juego Gato contra " + oponente + " - Tú eres " + mySymbol + ". " + turnText);
     }
 }

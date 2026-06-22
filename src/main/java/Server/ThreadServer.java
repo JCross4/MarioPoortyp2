@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import javax.annotation.processing.Messager;
 import javax.swing.JLabel;
 
-import Models.Message;
-import Models.MessageComodin;
-import Models.MessageNombres;
-import Models.MessagePieza;
-import Models.MessagePiezasDisponibles;
-import Models.MessageRequest;
-import Models.MessageGato;
+import Models.Messages.Message;
+import Models.Messages.MessageComodin;
+import Models.Messages.MessageGato;
+import Models.Messages.MessageMarioCards;
+import Models.Messages.MessageMemory;
+import Models.Messages.MessageNombres;
+import Models.Messages.MessagePieza;
+import Models.Messages.MessagePiezasDisponibles;
+import Models.Messages.MessageRequest;
 
 public class ThreadServer extends Thread{
     private Server servidor;
@@ -65,10 +67,12 @@ public class ThreadServer extends Thread{
                     servidor.setLabelsPlayers(labelsPlayers);
                     
                     servidor.broadcastExcept(mensajeRecibido, this.nombre);
-                } else if(mensajeRecibido.tipo.equals("mensajeChat")){
+                } 
+                else if(mensajeRecibido.tipo.equals("mensajeChat")){
                     servidor.broadcast(mensajeRecibido);
 
-                } else if (mensajeRecibido instanceof MessageRequest){
+                } 
+                else if (mensajeRecibido instanceof MessageRequest){
                     MessageRequest request = (MessageRequest) mensajeRecibido;
                     //System.out.println(request.getTipoRequest());
                     switch (request.getTipoRequest()) {
@@ -82,30 +86,35 @@ public class ThreadServer extends Thread{
                             break;
                     }
                     writerStream.writeObject(new Message("NameConfirmation", "Servidor", nombre, "Tu TS recibió tu nombre"));
-                }else if (mensajeRecibido instanceof MessagePiezasDisponibles){
+                }
+                else if (mensajeRecibido instanceof MessagePiezasDisponibles){
                     MessagePiezasDisponibles piezasDisponibles = (MessagePiezasDisponibles) mensajeRecibido;
                     servidor.setPiezasDisponibles(piezasDisponibles.getPiezasDisponibles());
                     piezasDisponibles = new MessagePiezasDisponibles("piezas", "Server", this.nombre, "", servidor.getPiezasDisponibles());
                     servidor.broadcast(piezasDisponibles);
                     System.out.println("Piezas servidor actualizadas");
-                }else if (mensajeRecibido.tipo.equals("broadcast")){
+                }
+                else if (mensajeRecibido.tipo.equals("broadcast")){
                     servidor.broadcast(mensajeRecibido);
-                }else if (mensajeRecibido instanceof MessagePieza){
+                }
+                else if (mensajeRecibido instanceof MessagePieza){
                     MessagePieza mensajePieza = (MessagePieza) mensajeRecibido;
                     //Enviar el movimiento a los otros clientes y dibujarlo en serverside
                     servidor.broadcastExcept(mensajePieza, nombre);
                     servidor.dibujarPieza(this.nombre, mensajePieza.getPieza(), mensajePieza.getNuevaPosicion());
-                } else if (mensajeRecibido instanceof MessageGato) {
+                } 
+                else if (mensajeRecibido instanceof MessageGato) {
                     servidor.sendPrivateMessage(mensajeRecibido);
-                } else if (mensajeRecibido instanceof MessageComodin){
+                } 
+                else if (mensajeRecibido instanceof MessageMemory) {
+                    servidor.sendPrivateMessage(mensajeRecibido);
+                } 
+                else if (mensajeRecibido instanceof MessageMarioCards) {
+                    servidor.broadcastExcept(mensajeRecibido, nombre);
+                } 
+                else if (mensajeRecibido instanceof MessageComodin){
                     servidor.sendPrivateMessage(mensajeRecibido);
                 }
-                
-                //TODO: procesar el mensaje recibido
-                // if tipo == ... then haga x
-                //broadcast: repartir el mensaje a todos
-                //mensaje individual
-                
             } catch (Exception ex) {
                 servidor.getPantalla().agregarMensaje(ex.getMessage());
                 isRunning = false;

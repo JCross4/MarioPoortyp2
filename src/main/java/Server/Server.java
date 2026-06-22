@@ -1,10 +1,10 @@
 package Server;
 
 import GUI.ServerFrame;
-import Models.Board;
-import Models.Message;
-import Models.MessageTurn;
-import Models.Pieza;
+import Models.Messages.Message;
+import Models.Messages.MessageTurn;
+import Models.Tablero.Board;
+import Models.Tablero.Pieza;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -24,8 +24,10 @@ public class Server {
     private String[] nombresColores = {"Negro", "Azul", "Cian", "Gris oscuro", "Verde", "Magenta", "Naranja", "Rosado", "Rojo", "Blanco"};
     private ArrayList<JLabel> labelsPlayers = new ArrayList<>();
     private ArrayList<String> nombresPlayers = new ArrayList<>();
+    private ArrayList<String> ordenPlayers = new ArrayList<>();
     private int currentTurnIndex = 0;
     private int turnNumber = 0;
+    private int metodoOrden = 0; //0: sin definir, 1: número entre 1 y 1000, 2: lanzamiento de dados
 
     //arrayList de clientes conectados: ThreadServidor
     ArrayList<ThreadServer> connectClientsThreads = new ArrayList<ThreadServer>();
@@ -74,7 +76,6 @@ public class Server {
             try {
                 if (msg.receptor.equals(client.getNombre())){
                     client.getWriterStream().writeObject(msg);
-                    break;
                 }
             } catch (IOException ex) {
                 pantalla.agregarMensaje("Error levantando el server: "+ex.getMessage());
@@ -94,11 +95,11 @@ public class Server {
         JLabel label = obtenerLabel(nombre);
         if (label == null){
             getPantalla().dibujarPieza(posicion, pieza, nombre);
-            System.out.println("Primera vez, label no existente, crear y agregar al array");
+            //System.out.println("Primera vez, label no existente, crear y agregar al array");
         }
         else{
             getPantalla().moverPiezaExistente(posicion, pieza, nombre);
-            System.out.println("Label sí existe, solo mover");
+            //System.out.println("Label sí existe, solo mover");
         }
     }
 
@@ -212,6 +213,14 @@ public class Server {
     
     public int getTurnNumber() {
         return turnNumber;
+    }
+
+    public int getMetodoOrden() {
+        return metodoOrden;
+    }
+
+    public void setMetodoOrden(int metodoOrden) {
+        this.metodoOrden = metodoOrden;
     }
     
 }

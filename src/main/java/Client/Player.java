@@ -2,7 +2,7 @@ package Client;
 
 import java.util.Random;
 
-import Models.Pieza;
+import Models.Tablero.Pieza;
 
 public class Player {
     private int posicion;
